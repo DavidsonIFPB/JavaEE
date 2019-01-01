@@ -2,6 +2,7 @@ package br.com.loopback.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,11 +27,17 @@ public class UsuarioController extends HttpServlet {
 
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 //		System.out.println("Chamando método GET");
-//		String nome = request.getParameter("nome");
-//		System.out.println("Nome:"+ nome);
-//		
-//		PrintWriter saida =response.getWriter();
-//		saida.println("Nome:"+ nome);
+
+		UsuarioDAO usuarioDAO = new UsuarioDAO();
+		
+		ArrayList<Usuario> listausuario;
+		listausuario = usuarioDAO.BuscarTodos();
+		PrintWriter saida =response.getWriter();
+		
+		for (Usuario u : listausuario){
+			saida.println("ID: "+u.getId()+" Nome: "+u.getNome()+" Login: "+u.getLogin());			
+		}
+		
 	}
 
 
@@ -39,21 +46,35 @@ public class UsuarioController extends HttpServlet {
 		//doGet(request, response);
 		System.out.println("Chamando método Post");
 		
+		String id = request.getParameter("txtid");
 		String nome=request.getParameter("txtnome");
 		String login=request.getParameter("txtlogin");
 		String senha=request.getParameter("txtsenha");
 		
 		Usuario usuario = new Usuario();
+		PrintWriter saida =response.getWriter();
+		
 		usuario.setLogin(login);
 		usuario.setNome(nome);
 		usuario.setSenha(senha);
 		
 		
-		UsuarioDAO usuarioDAO = new UsuarioDAO();
-		usuarioDAO.cadastrar(usuario);
+		if(id!=null && id!="" && id!="0") {
+			usuario.setId(Integer.parseInt(id));
+			saida.println("Alterado");			
+		}
+		else {
+			saida.println("Cadastrado");	
+		}
 		
-		PrintWriter saida =response.getWriter();
-		saida.println("Cadastrado");
+		
+		
+		UsuarioDAO usuarioDAO = new UsuarioDAO();
+		
+		usuarioDAO.salvar(usuario);
+		
+		
+		
 	}
 
 }

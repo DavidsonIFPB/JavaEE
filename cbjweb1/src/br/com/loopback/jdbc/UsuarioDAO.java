@@ -223,6 +223,14 @@ public class UsuarioDAO {
 		return usuarioRetorno;
 		
 	}
-
+	public void salvar(Usuario usuario) {
+		if(usuario.getId()==null && usuario.getId()==0) {
+			cadastrar(usuario);
+		}
+		else {
+			alterar(usuario);
+		}
+		
+	}
 
 }
