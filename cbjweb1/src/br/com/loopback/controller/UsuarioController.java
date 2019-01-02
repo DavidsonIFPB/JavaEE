@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,11 +33,18 @@ public class UsuarioController extends HttpServlet {
 		
 		ArrayList<Usuario> listausuario;
 		listausuario = usuarioDAO.BuscarTodos();
-		PrintWriter saida =response.getWriter();
+//		PrintWriter saida =response.getWriter();
 		
-		for (Usuario u : listausuario){
-			saida.println("ID: "+u.getId()+" Nome: "+u.getNome()+" Login: "+u.getLogin());			
-		}
+		
+		
+		//Atribuir no request a lista
+		request.setAttribute("lista", listausuario);
+
+		
+		//Encaminhamento ao listausuarios.JSP
+		
+		RequestDispatcher saida =request.getRequestDispatcher("listausuarios.jsp");
+		saida.forward(request, response);
 		
 	}
 
@@ -50,6 +58,10 @@ public class UsuarioController extends HttpServlet {
 		String nome=request.getParameter("txtnome");
 		String login=request.getParameter("txtlogin");
 		String senha=request.getParameter("txtsenha");
+		
+		
+		
+		
 		
 		Usuario usuario = new Usuario();
 		PrintWriter saida =response.getWriter();

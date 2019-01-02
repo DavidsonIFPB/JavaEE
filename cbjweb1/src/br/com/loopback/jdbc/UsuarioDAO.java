@@ -80,7 +80,7 @@ public class UsuarioDAO {
 	
 	public ArrayList<Usuario> BuscarTodos() {
 		
-		String sql = "SELECT * FROM usuario";
+		String sql = "SELECT * FROM usuario ORDER BY ID";
 		
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();
 		
