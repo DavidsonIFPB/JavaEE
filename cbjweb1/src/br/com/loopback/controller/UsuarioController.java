@@ -27,24 +27,56 @@ public class UsuarioController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-//		System.out.println("Chamando método GET");
+		System.out.println("Chamando método GET");
 
+		String acao= request.getParameter("acao");
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
+		Usuario usuario = new Usuario();
 		
-		ArrayList<Usuario> listausuario;
-		listausuario = usuarioDAO.BuscarTodos();
-//		PrintWriter saida =response.getWriter();
+		if(acao!=null && acao.equals("exc")){			
+			
+			int id= Integer.parseInt(request.getParameter("id"));			
+			usuario.setId(id);		
+			
+			usuarioDAO.excluir(usuario);
+			
+			
+		}
 		
-		
-		
-		//Atribuir no request a lista
-		request.setAttribute("lista", listausuario);
+		if(acao!=null && acao.equals("alt")  ) {
+			String id2= request.getParameter("id");
+			usuario = usuarioDAO.buscaPorId(Integer.parseInt(id2));
+			
+			request.setAttribute("usuario",usuario);
+			
+			RequestDispatcher saida =request.getRequestDispatcher("frmusuario.jsp");
+			saida.forward(request, response);
+		}
+		else {
+			ArrayList<Usuario> listausuario;
+			listausuario = usuarioDAO.BuscarTodos();
+//				PrintWriter saida =response.getWriter();
+			
+			
+			
+			//Atribuir no request a lista
+			request.setAttribute("lista", listausuario);
 
+			
+			//Encaminhamento ao listausuarios.JSP
+			
+			RequestDispatcher saida =request.getRequestDispatcher("listausuarios.jsp");
+			saida.forward(request, response);	
+		}
+						
 		
-		//Encaminhamento ao listausuarios.JSP
+			
 		
-		RequestDispatcher saida =request.getRequestDispatcher("listausuarios.jsp");
-		saida.forward(request, response);
+		
+			
+		
+		
+		
 		
 	}
 
